@@ -11,7 +11,7 @@ namespace Pizzy;
 /**
  * Set some defined constants and paths
  */
-define('PATH_ROOT', '/');
+(!defined('PATH_ROOT')) ? define('PATH_ROOT', '/') : null;
 define('PATH_TEMPLATES', PATH_ROOT . 'templates/');
 define('REGEX_TEMPLATE_INCLUDE', '/<!-- INCLUDE (.+?) -->/ms');
 define('REGEX_TEMPLATE_CONDITIONS', '/<!-- IF ([{\w}]+)? -->(.+?)(?:<!-- ELSE -->(.+?))?<!-- ENDIF -->/ms');
@@ -133,8 +133,7 @@ class Template
             foreach ($includes[1] as $x => $template_filename) {
                 if (file_exists(PATH_TEMPLATES . $template_filename)) {
                     $template_data = file_get_contents(PATH_TEMPLATES . $template_filename);
-                    $template_html = str_replace($includes[0][$x], $this->parseTemplate($template_data),
-                        $template_html);
+                    $template_html = str_replace($includes[0][$x], $this->parseTemplate($template_data), $template_html);
                 }
             }
         }
@@ -144,8 +143,7 @@ class Template
         if (!empty($ifs[0])) {
             foreach ($ifs[1] as $x => $b_key) {
                 $replacement = (isset($this->template_vars[$b_key]) && ($this->template_vars[$b_key])) ? $ifs[2][$x] : $ifs[3][$x];
-                $template_html = preg_replace('/<!-- IF ' . $b_key . ' -->(.+?)<!-- ENDIF -->/ms', $replacement,
-                    $template_html);
+                $template_html = preg_replace('/<!-- IF ' . $b_key . ' -->(.+?)<!-- ENDIF -->/ms', $replacement, $template_html);
             }
         }
 
@@ -155,7 +153,7 @@ class Template
     private function build_header()
     {
         // Special handling for per-page css
-        $header = new Template('header', false, false);
+        $header = new Template('_partials/header', false, false);
         $header->setTemplateVars(array(
             'PATH_CSS'     => PATH_CSS,
             'PATH_JS'      => PATH_JS,
@@ -166,7 +164,7 @@ class Template
 
     private function build_footer()
     {
-        $footer = new Template('footer', false, false);
+        $footer = new Template('_partials/footer', false, false);
         $footer->setTemplateVars(array(
             'VERSION_NUMBER' => VERSION,
             'YEAR'           => date('Y')
