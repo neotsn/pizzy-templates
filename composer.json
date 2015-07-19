@@ -1,5 +1,5 @@
 {
-  "name": "Pizzy/Template",
+  "name": "pizzy/template",
   "description": "Template System for thepizzy.net lab projects",
   "authors": [
     {
@@ -15,7 +15,7 @@
   ],
   "autoload": {
     "psr-4": {
-      "Pizzy\\Template\\": "src"
+      "Pizzy\\": "src"
     }
   }
 }
